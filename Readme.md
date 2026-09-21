@@ -1,7 +1,7 @@
 # 🏢 SmartBuild – Smart Building Management System
 
 <p align="center">
-  <img src="images/architecture.png" alt="SmartBuild AWS Architecture" width="100%">
+  <img src="./images/architecture.png" alt="SmartBuild AWS Architecture" width="100%">
 </p>
 
 <h2 align="center">Smart Building Management System</h2>
@@ -567,43 +567,43 @@ Reports module provides a foundation for future:
 
 ## ☁️ AWS Architecture
 
-![AWS Architecture](images/architecture.png)
+![AWS Architecture](./images/architecture.png)
 
 ## 🌐 API Gateway
 
-![API Gateway](images/api.jpg)
+![API Gateway](./images/api.jpg)
 
 ## 🗄️ DynamoDB
 
-![DynamoDB](images/db.jpg)
+![DynamoDB](./images/db.jpg)
 
 ## 🪣 Amazon S3
 
-![Amazon S3](images/s3.jpg)
+![Amazon S3](./images/s3.jpg)
 
 ## ⚡ AWS Lambda
 
-![AWS Lambda](images/lambda.jpg)
+![AWS Lambda](./images/lambda.jpg)
 
 ## 🏢 Building Management
 
-![Building Management](images/building.png)
+![Building Management](./images/building.png)
 
 ## 🏠 SmartBuild Dashboard
 
-![SmartBuild Dashboard](images/dashboard.png)
+![SmartBuild Dashboard](./images/dashboard.png)
 
 ## 🛠️ Complaint Management
 
-![Complaint Management](images/complaints.png)
+![Complaint Management](./images/complaints.png)
 
 ## 🔧 Maintenance Management
 
-![Maintenance Management](images/maintance.png)
+![Maintenance Management](./images/maintance.png)
 
 ## 🛡️ Security Center
 
-![Security Center](images/Security.png)
+![Security Center](./images/Security.png)
 
 ---
 
