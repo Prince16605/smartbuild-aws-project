@@ -1,0 +1,4672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartBuild | Smart Building Management</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    text-decoration:none;
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+========================================================= */
+
+#loginPage{
+
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(7,20,40,.96),
+        rgba(15,62,100,.90)
+    ),
+    url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80")
+    center/cover;
+}
+
+.login-card{
+
+    width:100%;
+    max-width:430px;
+
+    padding:42px 38px;
+
+    background:rgba(255,255,255,.97);
+
+    border-radius:24px;
+
+    box-shadow:
+    0 30px 80px rgba(0,0,0,.35);
+
+    animation:loginAppear .7s ease;
+}
+
+@keyframes loginAppear{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.login-logo{
+
+    width:72px;
+    height:72px;
+
+    margin:0 auto 15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    color:white;
+
+    font-size:30px;
+
+    background:
+    linear-gradient(135deg,#087cf5,#06b6d4);
+
+    box-shadow:
+    0 12px 30px rgba(8,124,245,.3);
+}
+
+.login-brand{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.login-brand h1{
+    color:#10243e;
+    font-size:30px;
+}
+
+.login-brand p{
+    color:#718096;
+    font-size:14px;
+    margin-top:5px;
+}
+
+.login-input{
+
+    height:55px;
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    padding:0 16px;
+
+    margin-bottom:16px;
+
+    border-radius:12px;
+
+    background:#f5f7fa;
+
+    border:1px solid #e2e8f0;
+}
+
+.login-input:focus-within{
+
+    background:white;
+
+    border-color:#087cf5;
+
+    box-shadow:
+    0 0 0 4px rgba(8,124,245,.08);
+}
+
+.login-input i{
+    color:#718096;
+}
+
+.login-input input{
+
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+}
+
+.password-eye{
+    cursor:pointer;
+}
+
+.login-options{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:18px 0 24px;
+
+    font-size:13px;
+}
+
+.login-options a{
+    color:#087cf5;
+    font-weight:600;
+}
+
+.login-btn{
+
+    width:100%;
+    height:55px;
+
+    border:none;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    background:
+    linear-gradient(135deg,#087cf5,#2563eb);
+
+    transition:.3s;
+}
+
+.login-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 12px 28px rgba(8,124,245,.3);
+}
+
+.demo-box{
+
+    margin-top:22px;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    background:#f8fafc;
+
+    color:#64748b;
+
+    font-size:11px;
+}
+
+.login-error{
+
+    display:none;
+
+    margin-top:15px;
+
+    padding:10px;
+
+    text-align:center;
+
+    border-radius:9px;
+
+    color:#dc2626;
+
+    background:#fee2e2;
+}
+
+
+/* =========================================================
+   DASHBOARD APPLICATION
+========================================================= */
+
+#dashboardApp{
+    display:none;
+}
+
+.app{
+
+    min-height:100vh;
+
+    display:flex;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+
+    width:240px;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    z-index:1000;
+
+    display:flex;
+    flex-direction:column;
+
+    background:#101c2d;
+
+    color:white;
+
+    transition:.3s;
+}
+
+.brand{
+
+    padding:23px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
+}
+
+.brand-icon{
+
+    width:43px;
+    height:43px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:
+    linear-gradient(135deg,#087cf5,#06b6d4);
+
+    font-size:20px;
+}
+
+.brand h2{
+    font-size:19px;
+}
+
+.brand small{
+    color:#8fa2bd;
+    font-size:9px;
+}
+
+.navigation{
+
+    flex:1;
+
+    padding:20px 10px;
+
+    overflow-y:auto;
+}
+
+.nav-item{
+
+    height:46px;
+
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+
+    padding:0 14px;
+
+    margin-bottom:5px;
+
+    color:#a9b8ca;
+
+    border-radius:9px;
+
+    transition:.2s;
+}
+
+.nav-item:hover{
+
+    color:white;
+
+    background:#182a43;
+}
+
+.nav-item.active{
+
+    color:white;
+
+    background:
+    linear-gradient(90deg,#087cf5,#2477df);
+
+    box-shadow:
+    0 5px 15px rgba(8,124,245,.25);
+}
+
+.nav-item i{
+    width:20px;
+    text-align:center;
+}
+
+.nav-badge{
+
+    margin-left:auto;
+
+    padding:3px 7px;
+
+    border-radius:20px;
+
+    background:#ef4444;
+
+    color:white;
+
+    font-size:10px;
+}
+
+.sidebar-bottom{
+
+    padding:15px;
+
+    border-top:
+    1px solid rgba(255,255,255,.08);
+}
+
+.admin{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:15px;
+}
+
+.avatar{
+
+    width:39px;
+    height:39px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#334155;
+
+    font-weight:bold;
+}
+
+.admin strong{
+    display:block;
+    font-size:12px;
+}
+
+.admin small{
+    color:#8fa2bd;
+    font-size:9px;
+}
+
+.logout{
+
+    width:100%;
+
+    padding:10px;
+
+    border:none;
+
+    background:transparent;
+
+    color:#a9b8ca;
+
+    text-align:left;
+}
+
+.logout:hover{
+    color:white;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+
+    width:calc(100% - 240px);
+
+    margin-left:240px;
+
+    padding:0 22px 30px;
+}
+
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.header{
+
+    height:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.search{
+
+    width:370px;
+
+    height:43px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 15px;
+
+    border-radius:10px;
+
+    background:white;
+
+    color:#94a3b8;
+}
+
+.search input{
+
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    margin-left:10px;
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+}
+
+.notification{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    position:relative;
+
+    border-radius:50%;
+
+    background:white;
+}
+
+.notification span{
+
+    position:absolute;
+
+    right:-2px;
+    top:-3px;
+
+    width:18px;
+    height:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    color:white;
+
+    background:#ef4444;
+
+    font-size:10px;
+}
+
+.date{
+
+    display:flex;
+    flex-direction:column;
+
+    font-size:11px;
+}
+
+.date small{
+    color:#64748b;
+}
+
+.mobile-menu{
+    display:none;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    min-height:135px;
+
+    padding:25px 28px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    color:white;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(10,36,64,.98),
+        rgba(15,57,91,.78)
+    ),
+    url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80")
+    center/cover;
+}
+
+.hero h1{
+    font-size:27px;
+}
+
+.hero p{
+    color:#d5e3f1;
+    margin-top:6px;
+}
+
+.building-info{
+    text-align:right;
+}
+
+.building-info h2{
+    font-size:20px;
+}
+
+.building-info p{
+    font-size:12px;
+    margin-top:5px;
+}
+
+.building-stats{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:30px;
+
+    margin-top:10px;
+}
+
+.building-stats div{
+    display:flex;
+    flex-direction:column;
+}
+
+.building-stats strong{
+    font-size:22px;
+}
+
+.building-stats small{
+    color:#cbd5e1;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+.stat{
+
+    padding:17px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    position:relative;
+
+    background:white;
+
+    border-radius:13px;
+
+    box-shadow:
+    0 3px 15px rgba(15,23,42,.04);
+}
+
+.stat-icon{
+
+    width:46px;
+    height:46px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    font-size:19px;
+}
+
+.energy{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.water{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+.temp{
+    background:#ffedd5;
+    color:#f97316;
+}
+
+.people{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+.stat h2{
+    font-size:22px;
+}
+
+.stat p{
+    color:#64748b;
+    font-size:11px;
+}
+
+.growth{
+
+    margin-left:auto;
+    align-self:flex-start;
+
+    color:#16a34a;
+
+    background:#ecfdf5;
+
+    padding:4px 7px;
+
+    border-radius:20px;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1.25fr .8fr 1.25fr .9fr;
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+.panel{
+
+    padding:18px;
+
+    background:white;
+
+    border-radius:13px;
+
+    box-shadow:
+    0 3px 15px rgba(15,23,42,.04);
+}
+
+.panel-title{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+}
+
+.panel-title h3{
+    font-size:15px;
+}
+
+.panel-title a{
+    color:#087cf5;
+    font-size:11px;
+}
+
+.panel-title select{
+
+    padding:5px 10px;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:7px;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   WATER
+========================================================= */
+
+.water-wrapper{
+
+    width:170px;
+    height:170px;
+
+    position:relative;
+
+    margin:12px auto;
+}
+
+.water-wrapper canvas{
+
+    width:100%!important;
+    height:100%!important;
+}
+
+.water-center{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+}
+
+.water-center strong{
+    font-size:25px;
+}
+
+.water-center small{
+    color:#64748b;
+    font-size:8px;
+}
+
+.normal{
+
+    width:max-content;
+
+    margin:auto;
+
+    padding:5px 15px;
+
+    border-radius:20px;
+
+    color:#16a34a;
+
+    background:#dcfce7;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert{
+
+    display:grid;
+
+    grid-template-columns:30px 1fr auto;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #f1f5f9;
+}
+
+.alert-icon{
+
+    width:28px;
+    height:28px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:8px;
+}
+
+.alert-danger{
+    color:#ef4444;
+    background:#fee2e2;
+}
+
+.alert-warning{
+    color:#f97316;
+    background:#ffedd5;
+}
+
+.alert-info{
+    color:#2563eb;
+    background:#dbeafe;
+}
+
+.alert strong{
+    display:block;
+    font-size:10px;
+}
+
+.alert small{
+    display:block;
+    color:#64748b;
+    font-size:8px;
+    margin-top:3px;
+}
+
+.alert time{
+    color:#64748b;
+    font-size:8px;
+}
+
+
+/* =========================================================
+   LOWER GRID
+========================================================= */
+
+.lower{
+
+    display:grid;
+
+    grid-template-columns:
+    1.15fr 1.5fr 1fr;
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+
+/* =========================================================
+   LIFTS
+========================================================= */
+
+.lifts{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:10px;
+}
+
+.lift{
+
+    padding:12px;
+
+    text-align:center;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:6px;
+
+    background:#f8fafc;
+
+    border-radius:10px;
+}
+
+.lift-icon{
+
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+}
+
+.lift-good{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.lift-maintenance{
+    background:#ffedd5;
+    color:#f97316;
+}
+
+.lift strong{
+    font-size:11px;
+}
+
+.status{
+
+    padding:4px 8px;
+
+    border-radius:20px;
+
+    font-size:8px;
+}
+
+.status-good{
+    color:#16a34a;
+    background:#dcfce7;
+}
+
+.status-warning{
+    color:#ea580c;
+    background:#ffedd5;
+}
+
+.lift small{
+    color:#64748b;
+    font-size:8px;
+}
+
+
+/* =========================================================
+   COMPLAINTS
+========================================================= */
+
+.complaint{
+
+    display:grid;
+
+    grid-template-columns:
+    45px 1fr auto 65px;
+
+    gap:8px;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #f1f5f9;
+}
+
+.complaint strong{
+    font-size:9px;
+}
+
+.complaint b{
+    display:block;
+    font-size:10px;
+}
+
+.complaint small{
+    display:block;
+    color:#64748b;
+    font-size:8px;
+}
+
+.tag{
+
+    padding:4px 8px;
+
+    border-radius:20px;
+
+    font-size:8px;
+}
+
+.tag-blue{
+    color:#2563eb;
+    background:#dbeafe;
+}
+
+.tag-orange{
+    color:#ea580c;
+    background:#ffedd5;
+}
+
+.tag-red{
+    color:#dc2626;
+    background:#fee2e2;
+}
+
+.tag-green{
+    color:#16a34a;
+    background:#dcfce7;
+}
+
+
+/* =========================================================
+   NOTICES
+========================================================= */
+
+.notice{
+
+    display:flex;
+
+    gap:10px;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #f1f5f9;
+}
+
+.notice-icon{
+
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:8px;
+
+    color:#2563eb;
+
+    background:#eff6ff;
+}
+
+.notice strong{
+    display:block;
+    font-size:10px;
+}
+
+.notice small{
+    display:block;
+    color:#64748b;
+    font-size:8px;
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.bottom{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1.6fr;
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+.occupancy-content{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:35px;
+}
+
+.occupancy-chart{
+
+    width:150px;
+    height:150px;
+
+    position:relative;
+}
+
+.occupancy-chart canvas{
+    width:100%!important;
+    height:100%!important;
+}
+
+.occupancy-center{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+}
+
+.occupancy-center strong{
+    font-size:24px;
+}
+
+.occupancy-center small{
+    color:#64748b;
+    font-size:9px;
+}
+
+.occupancy-info p{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:10px;
+
+    margin:10px 0;
+}
+
+.dot{
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+}
+
+.dot-blue{
+    background:#2563eb;
+}
+
+.dot-gray{
+    background:#94a3b8;
+}
+
+.dot-dark{
+    background:#475569;
+}
+
+.occupancy-info strong{
+    margin-left:20px;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.actions{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:12px;
+}
+
+.action{
+
+    min-height:95px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f8fafc;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:9px;
+
+    transition:.2s;
+}
+
+.action:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 8px 20px rgba(15,23,42,.08);
+}
+
+.action i{
+
+    font-size:22px;
+
+    color:#087cf5;
+}
+
+.action span{
+    font-size:9px;
+    color:#475569;
+}
+
+
+/* =========================================================
+   MODULE SECTIONS
+========================================================= */
+
+.module{
+
+    display:none;
+
+    margin-top:15px;
+}
+
+.module.active{
+    display:block;
+}
+
+.module-header{
+
+    padding:25px;
+
+    border-radius:15px;
+
+    color:white;
+
+    background:
+    linear-gradient(135deg,#0f2d4a,#087cf5);
+}
+
+.module-header h2{
+    font-size:25px;
+}
+
+.module-header p{
+    color:#dbeafe;
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-container{
+
+    margin-top:15px;
+
+    overflow:auto;
+
+    background:white;
+
+    border-radius:13px;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th,
+td{
+
+    padding:14px;
+
+    text-align:left;
+
+    border-bottom:1px solid #eef2f7;
+
+    font-size:12px;
+}
+
+th{
+    color:#475569;
+    background:#f8fafc;
+}
+
+
+/* =========================================================
+   MONITORING CARDS
+========================================================= */
+
+.monitor-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+.monitor-card{
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:13px;
+
+    box-shadow:
+    0 3px 15px rgba(15,23,42,.04);
+}
+
+.monitor-card i{
+    font-size:25px;
+    color:#087cf5;
+}
+
+.monitor-card h3{
+    margin-top:12px;
+    font-size:14px;
+}
+
+.monitor-value{
+
+    margin-top:8px;
+
+    font-size:27px;
+
+    font-weight:700;
+}
+
+.monitor-status{
+
+    margin-top:7px;
+
+    color:#16a34a;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    padding:25px 0 5px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1200px){
+
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .monitor-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.show{
+        transform:translateX(0);
+    }
+
+    .main{
+        width:100%;
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+
+        width:40px;
+        height:40px;
+
+        border:none;
+
+        background:white;
+
+        border-radius:8px;
+    }
+
+    .header{
+        gap:10px;
+    }
+
+    .search{
+        flex:1;
+    }
+
+    .lower{
+        grid-template-columns:1fr;
+    }
+
+    .bottom{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .main{
+        padding:0 12px 20px;
+    }
+
+    .date{
+        display:none;
+    }
+
+    .hero{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+    }
+
+    .building-info{
+        text-align:left;
+    }
+
+    .building-stats{
+        justify-content:flex-start;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .monitor-grid{
+        grid-template-columns:1fr;
+    }
+
+    .lifts{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .occupancy-content{
+        flex-direction:column;
+    }
+
+    .complaint{
+        grid-template-columns:45px 1fr;
+    }
+
+    .complaint .tag,
+    .complaint > small{
+        display:none;
+    }
+
+    .login-card{
+        padding:35px 24px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ========================================================
+     LOGIN PAGE
+========================================================= -->
+
+<section id="loginPage">
+
+    <div class="login-card">
+
+        <div class="login-brand">
+
+            <div class="login-logo">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <h1>SmartBuild</h1>
+
+            <p>
+                Smart Building Management
+            </p>
+
+        </div>
+
+
+        <form id="loginForm">
+
+            <div class="login-input">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+            </div>
+
+
+            <div class="login-input">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                >
+
+                <i
+                    id="passwordEye"
+                    class="fa-solid fa-eye password-eye">
+                </i>
+
+            </div>
+
+
+            <div class="login-options">
+
+                <label>
+                    <input type="checkbox">
+                    Remember me
+                </label>
+
+                <a href="#">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+            >
+
+                Login
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+
+            <div
+                class="login-error"
+                id="loginError"
+            >
+                Invalid email or password.
+            </div>
+
+        </form>
+
+
+        <div class="demo-box">
+
+            <strong>Demo Login</strong>
+
+            <br>
+
+            Email:
+            admin@smartbuild.com
+
+            <br>
+
+            Password:
+            admin123
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ========================================================
+     DASHBOARD
+========================================================= -->
+
+<section id="dashboardApp">
+
+<div class="app">
+
+
+<!-- ========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-building"></i>
+
+        </div>
+
+        <div>
+
+            <h2>SmartBuild</h2>
+
+            <small>
+                Smart Building Management
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <nav class="navigation">
+
+
+        <a
+            href="#"
+            class="nav-item active"
+            data-page="dashboard"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="monitoring"
+        >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            Monitoring
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="complaints"
+        >
+
+            <i class="fa-solid fa-bell"></i>
+
+            Complaints
+
+            <span class="nav-badge">
+                12
+            </span>
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="residents"
+        >
+
+            <i class="fa-solid fa-users"></i>
+
+            Residents
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="maintenance"
+        >
+
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+            Maintenance
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="lifts"
+        >
+
+            <i class="fa-solid fa-elevator"></i>
+
+            Lift Management
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="security"
+        >
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            Security
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="notices"
+        >
+
+            <i class="fa-solid fa-bullhorn"></i>
+
+            Notices
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="reports"
+        >
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            Reports
+
+        </a>
+
+
+        <a
+            href="#"
+            class="nav-item"
+            data-page="settings"
+        >
+
+            <i class="fa-solid fa-gear"></i>
+
+            Settings
+
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="admin">
+
+            <div class="avatar">
+                A
+            </div>
+
+            <div>
+
+                <strong>
+                    Admin User
+                </strong>
+
+                <small>
+                    admin@smartbuild.com
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout"
+            id="logout"
+        >
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            &nbsp; Logout
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- ========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <button
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <i class="fa-solid fa-bars"></i>
+
+    </button>
+
+
+    <div class="search">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+            type="text"
+            placeholder="Search anything..."
+        >
+
+    </div>
+
+
+    <div class="header-right">
+
+        <button class="notification">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span>
+                3
+            </span>
+
+        </button>
+
+
+        <div class="date">
+
+            <strong id="dateText">
+                Monday, 21 September 2026
+            </strong>
+
+            <small id="clock">
+                10:24 AM
+            </small>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ========================================================
+     DASHBOARD PAGE
+========================================================= -->
+
+<div
+    class="page"
+    id="dashboardPage"
+>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div>
+
+        <h1>
+            Welcome back, Admin!
+        </h1>
+
+        <p>
+            Here's what's happening in your building today.
+        </p>
+
+    </div>
+
+
+    <div class="building-info">
+
+        <h2 id="buildingName">Green Valley Residency</h2>
+
+        <p>
+            <i class="fa-solid fa-location-dot"></i>
+            <span id="buildingLocation">Ahmedabad, Gujarat</span>
+        </p>
+
+
+        <div class="building-stats">
+
+            <div>
+
+                <strong id="totalFlatsValue">
+                    60
+                </strong>
+
+                <small>
+                    Total Flats
+                </small>
+
+            </div>
+
+
+            <div>
+
+                <strong id="occupancyValue" style="color:#34d399">
+                    86%
+                </strong>
+
+                <small>
+                    Occupancy
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+
+    <div class="stat">
+
+        <div class="stat-icon energy">
+            <i class="fa-solid fa-bolt"></i>
+        </div>
+
+        <div>
+
+            <h2 id="energyUsageValue">
+                68.5 kWh
+            </h2>
+
+            <p>
+                Energy Usage
+            </p>
+
+        </div>
+
+        <span class="growth">
+            ↑ 5%
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon water">
+            <i class="fa-solid fa-droplet"></i>
+        </div>
+
+        <div>
+
+            <h2 id="waterLevelValue">
+                72%
+            </h2>
+
+            <p>
+                Water Level
+            </p>
+
+        </div>
+
+        <span class="growth">
+            ↑ 2%
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon temp">
+            <i class="fa-solid fa-temperature-half"></i>
+        </div>
+
+        <div>
+
+            <h2 id="temperatureValue">
+                28°C
+            </h2>
+
+            <p>
+                Temperature
+            </p>
+
+        </div>
+
+        <span class="growth">
+            ↑ 1°C
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon people">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+        <div>
+
+            <h2 id="residentCountValue">
+                120
+            </h2>
+
+            <p>
+                Total Residents
+            </p>
+
+        </div>
+
+        <span class="growth">
+            ↑ 3
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- CHARTS -->
+
+<section class="grid">
+
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            <h3>
+                Energy Usage
+            </h3>
+
+            <select>
+                <option>Today</option>
+                <option>Week</option>
+                <option>Month</option>
+            </select>
+
+        </div>
+
+        <canvas id="energyChart"></canvas>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            <h3>
+                Water Tank Level
+            </h3>
+
+        </div>
+
+        <div class="water-wrapper">
+
+            <canvas id="waterChart"></canvas>
+
+            <div class="water-center">
+
+                <strong id="waterCenterValue">
+                    72%
+                </strong>
+
+                <small id="waterCapacityText">7,200 / 10,000 L</small>
+
+            </div>
+
+        </div>
+
+        <div class="normal">
+            Normal
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            <h3>
+                Temperature
+            </h3>
+
+            <select>
+                <option>Today</option>
+                <option>Week</option>
+            </select>
+
+        </div>
+
+        <canvas id="temperatureChart"></canvas>
+
+    </div>
+
+
+    <!-- ALERTS -->
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            <h3>
+                Active Alerts
+            </h3>
+
+            <a href="#">
+                View All
+            </a>
+
+        </div>
+
+
+        <div id="activeAlertsContainer">
+
+            <div class="alert">
+                <div style="text-align:center;width:100%;">
+                    Loading alerts from DynamoDB...
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LOWER -->
+
+<section class="lower">
+
+
+<!-- LIFTS -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Lift Status
+        </h3>
+
+        <a href="#">
+            View All
+        </a>
+
+    </div>
+
+
+    <div class="lifts">
+
+
+        <div class="lift">
+
+            <div class="lift-icon lift-good">
+
+                <i class="fa-solid fa-elevator"></i>
+
+            </div>
+
+            <strong>
+                Lift A
+            </strong>
+
+            <span class="status status-good">
+                Operational
+            </span>
+
+            <small>
+                Ground Floor
+            </small>
+
+        </div>
+
+
+        <div class="lift">
+
+            <div class="lift-icon lift-maintenance">
+
+                <i class="fa-solid fa-elevator"></i>
+
+            </div>
+
+            <strong>
+                Lift B
+            </strong>
+
+            <span class="status status-warning">
+                Maintenance
+            </span>
+
+            <small>
+                Out of Service
+            </small>
+
+        </div>
+
+
+        <div class="lift">
+
+            <div class="lift-icon lift-good">
+
+                <i class="fa-solid fa-elevator"></i>
+
+            </div>
+
+            <strong>
+                Lift C
+            </strong>
+
+            <span class="status status-good">
+                Operational
+            </span>
+
+            <small>
+                5th Floor
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- COMPLAINTS -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Recent Complaints
+        </h3>
+
+        <a href="#" onclick="showPage('complaints')">
+            View All
+        </a>
+
+    </div>
+
+
+    <div class="complaint">
+
+        <strong>
+            #1024
+        </strong>
+
+        <div>
+
+            <b>
+                AC not working
+            </b>
+
+            <small>
+                Block A - 4th Floor
+            </small>
+
+        </div>
+
+        <span class="tag tag-blue">
+            Assigned
+        </span>
+
+        <small>
+            2 hours ago
+        </small>
+
+    </div>
+
+
+    <div class="complaint">
+
+        <strong>
+            #1023
+        </strong>
+
+        <div>
+
+            <b>
+                Water leakage
+            </b>
+
+            <small>
+                Block C - 2nd Floor
+            </small>
+
+        </div>
+
+        <span class="tag tag-orange">
+            In Progress
+        </span>
+
+        <small>
+            4 hours ago
+        </small>
+
+    </div>
+
+
+    <div class="complaint">
+
+        <strong>
+            #1022
+        </strong>
+
+        <div>
+
+            <b>
+                Lift making noise
+            </b>
+
+            <small>
+                Block B - 6th Floor
+            </small>
+
+        </div>
+
+        <span class="tag tag-red">
+            Pending
+        </span>
+
+        <small>
+            6 hours ago
+        </small>
+
+    </div>
+
+
+    <div class="complaint">
+
+        <strong>
+            #1021
+        </strong>
+
+        <div>
+
+            <b>
+                Light not working
+            </b>
+
+            <small>
+                Block A - 1st Floor
+            </small>
+
+        </div>
+
+        <span class="tag tag-green">
+            Resolved
+        </span>
+
+        <small>
+            1 day ago
+        </small>
+
+    </div>
+
+</div>
+
+
+<!-- NOTICES -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Building Notices
+        </h3>
+
+        <a href="#" onclick="showPage('notices')">
+            View All
+        </a>
+
+    </div>
+
+
+    <div class="notice">
+
+        <div class="notice-icon">
+            <i class="fa-solid fa-calendar-check"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Maintenance Schedule
+            </strong>
+
+            <small>
+                Water tank cleaning on 28th September
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="notice">
+
+        <div class="notice-icon">
+            <i class="fa-solid fa-bolt"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Power Shutdown
+            </strong>
+
+            <small>
+                Electricity maintenance on 30th September
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="notice">
+
+        <div class="notice-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Community Meeting
+            </strong>
+
+            <small>
+                Monthly meeting on 5th October
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- BOTTOM -->
+
+<section class="bottom">
+
+
+<!-- OCCUPANCY -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Occupancy Overview
+        </h3>
+
+    </div>
+
+
+    <div class="occupancy-content">
+
+        <div class="occupancy-chart">
+
+            <canvas id="occupancyChart"></canvas>
+
+            <div class="occupancy-center">
+
+                <strong id="occupancyCenterValue">
+                    86%
+                </strong>
+
+                <small>
+                    Occupied
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="occupancy-info">
+
+            <p>
+
+                <span class="dot dot-blue"></span>
+
+                Occupied
+
+                <strong id="occupiedFlatsValue">
+                    52
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                <span class="dot dot-gray"></span>
+
+                Vacant
+
+                <strong id="vacantFlatsValue">
+                    8
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                <span class="dot dot-dark"></span>
+
+                Total Flats
+
+                <strong>
+                    120
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- QUICK ACTIONS -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Quick Actions
+        </h3>
+
+    </div>
+
+
+    <div class="actions">
+
+
+        <button
+            class="action"
+            onclick="showPage('complaints')"
+        >
+
+            <i class="fa-solid fa-wrench"></i>
+
+            <span>
+                Raise Complaint
+            </span>
+
+        </button>
+
+
+        <button
+            class="action"
+            onclick="showPage('notices')"
+        >
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            <span>
+                Add Notice
+            </span>
+
+        </button>
+
+
+        <button
+            class="action"
+            onclick="showPage('reports')"
+        >
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            <span>
+                View Reports
+            </span>
+
+        </button>
+
+
+        <button
+            class="action"
+            onclick="showPage('residents')"
+        >
+
+            <i class="fa-solid fa-user-group"></i>
+
+            <span>
+                Manage Residents
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- ========================================================
+     MONITORING PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="monitoringPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Building Monitoring
+        </h2>
+
+        <p>
+            Real-time building sensor and infrastructure monitoring.
+        </p>
+
+    </div>
+
+
+    <div class="monitor-grid">
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-temperature-half"></i>
+
+            <h3>
+                Temperature
+            </h3>
+
+            <div class="monitor-value">
+                <span id="monitorTemperatureValue">28°C</span>
+            </div>
+
+            <div class="monitor-status">
+                ● Normal
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-droplet"></i>
+
+            <h3>
+                Water Level
+            </h3>
+
+            <div class="monitor-value">
+                <span id="monitorWaterValue">72%</span>
+            </div>
+
+            <div class="monitor-status">
+                ● Normal
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            <h3>
+                Energy Usage
+            </h3>
+
+            <div class="monitor-value">
+                <span id="monitorEnergyValue">68.5 kWh</span>
+            </div>
+
+            <div class="monitor-status">
+                ● Normal
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <h3>
+                Security
+            </h3>
+
+            <div class="monitor-value">
+                Secure
+            </div>
+
+            <div class="monitor-status">
+                ● Protected
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     COMPLAINTS PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="complaintsPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Complaint Management
+        </h2>
+
+        <p>
+            Manage resident complaints and maintenance requests.
+        </p>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Complaint</th>
+                    <th>Location</th>
+                    <th>Resident</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+                    <td>#1024</td>
+                    <td>AC not working</td>
+                    <td>Block A - 4F</td>
+                    <td>Rahul Patel</td>
+                    <td>
+                        <span class="tag tag-blue">
+                            Assigned
+                        </span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>#1023</td>
+                    <td>Water leakage</td>
+                    <td>Block C - 2F</td>
+                    <td>Priya Shah</td>
+                    <td>
+                        <span class="tag tag-orange">
+                            In Progress
+                        </span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>#1022</td>
+                    <td>Lift making noise</td>
+                    <td>Block B - 6F</td>
+                    <td>Amit Joshi</td>
+                    <td>
+                        <span class="tag tag-red">
+                            Pending
+                        </span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>#1021</td>
+                    <td>Light not working</td>
+                    <td>Block A - 1F</td>
+                    <td>Neha Shah</td>
+                    <td>
+                        <span class="tag tag-green">
+                            Resolved
+                        </span>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     RESIDENTS PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="residentsPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Residents
+        </h2>
+
+        <p>
+            Manage building residents and apartment information.
+        </p>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Apartment</th>
+                    <th>Block</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="residentsTableBody">
+
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        Loading residents from DynamoDB...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     MAINTENANCE PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="maintenancePage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Maintenance Management
+        </h2>
+
+        <p>
+            Track maintenance activities and service teams.
+        </p>
+
+    </div>
+
+
+    <div class="monitor-grid">
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+            <h3>
+                Open Requests
+            </h3>
+
+            <div class="monitor-value">
+                12
+            </div>
+
+            <div class="monitor-status">
+                Need Attention
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-spinner"></i>
+
+            <h3>
+                In Progress
+            </h3>
+
+            <div class="monitor-value">
+                7
+            </div>
+
+            <div class="monitor-status">
+                Active
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <h3>
+                Resolved
+            </h3>
+
+            <div class="monitor-value">
+                84
+            </div>
+
+            <div class="monitor-status">
+                Completed
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h3>
+                Technicians
+            </h3>
+
+            <div class="monitor-value">
+                16
+            </div>
+
+            <div class="monitor-status">
+                Available
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     LIFT PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="liftsPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Lift Management
+        </h2>
+
+        <p>
+            Monitor all building elevators.
+        </p>
+
+    </div>
+
+
+    <div class="monitor-grid">
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-elevator"></i>
+
+            <h3>
+                Lift A
+            </h3>
+
+            <div class="monitor-value">
+                Operational
+            </div>
+
+            <div class="monitor-status">
+                Ground Floor
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-elevator"></i>
+
+            <h3>
+                Lift B
+            </h3>
+
+            <div class="monitor-value">
+                Maintenance
+            </div>
+
+            <div class="monitor-status">
+                Out of Service
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-elevator"></i>
+
+            <h3>
+                Lift C
+            </h3>
+
+            <div class="monitor-value">
+                Operational
+            </div>
+
+            <div class="monitor-status">
+                5th Floor
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     SECURITY PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="securityPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Security Center
+        </h2>
+
+        <p>
+            Building security and access monitoring.
+        </p>
+
+    </div>
+
+
+    <div class="monitor-grid">
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-video"></i>
+
+            <h3>
+                CCTV Cameras
+            </h3>
+
+            <div class="monitor-value">
+                32
+            </div>
+
+            <div class="monitor-status">
+                All Online
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-door-open"></i>
+
+            <h3>
+                Main Gate
+            </h3>
+
+            <div class="monitor-value">
+                Secure
+            </div>
+
+            <div class="monitor-status">
+                Access Normal
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-id-card"></i>
+
+            <h3>
+                Access Cards
+            </h3>
+
+            <div class="monitor-value">
+                184
+            </div>
+
+            <div class="monitor-status">
+                Active
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <h3>
+                Security Alerts
+            </h3>
+
+            <div class="monitor-value" id="securityAlertCount">
+                1
+            </div>
+
+            <div class="monitor-status" id="securityAlertStatus">
+                Review Required
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     NOTICES PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="noticesPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Building Notices
+        </h2>
+
+        <p>
+            Important announcements and community updates.
+        </p>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Notice</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        Maintenance Schedule
+                    </td>
+
+                    <td>
+                        Water tank cleaning
+                    </td>
+
+                    <td>
+                        28 September 2026
+                    </td>
+
+                    <td>
+                        <span class="tag tag-blue">
+                            Upcoming
+                        </span>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Power Shutdown
+                    </td>
+
+                    <td>
+                        Electricity maintenance
+                    </td>
+
+                    <td>
+                        30 September 2026
+                    </td>
+
+                    <td>
+                        <span class="tag tag-orange">
+                            Scheduled
+                        </span>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Community Meeting
+                    </td>
+
+                    <td>
+                        Monthly society meeting
+                    </td>
+
+                    <td>
+                        5 October 2026
+                    </td>
+
+                    <td>
+                        <span class="tag tag-green">
+                            Active
+                        </span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     REPORTS PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="reportsPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Reports & Analytics
+        </h2>
+
+        <p>
+            Building performance and operational reports.
+        </p>
+
+    </div>
+
+
+    <div class="monitor-grid">
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            <h3>
+                Monthly Energy
+            </h3>
+
+            <div class="monitor-value">
+                4,820 kWh
+            </div>
+
+            <div class="monitor-status">
+                ↓ 8% from last month
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-droplet"></i>
+
+            <h3>
+                Water Consumption
+            </h3>
+
+            <div class="monitor-value">
+                78,400 L
+            </div>
+
+            <div class="monitor-status">
+                Normal
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+            <h3>
+                Maintenance
+            </h3>
+
+            <div class="monitor-value">
+                96%
+            </div>
+
+            <div class="monitor-status">
+                Resolution Rate
+            </div>
+
+        </div>
+
+
+        <div class="monitor-card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h3>
+                Occupancy
+            </h3>
+
+            <div class="monitor-value">
+                84%
+            </div>
+
+            <div class="monitor-status">
+                101 Occupied
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     SETTINGS PAGE
+========================================================= -->
+
+<div
+    class="module"
+    id="settingsPage"
+>
+
+    <div class="module-header">
+
+        <h2>
+            Settings
+        </h2>
+
+        <p>
+            Manage SmartBuild system settings.
+        </p>
+
+    </div>
+
+
+    <div class="panel" style="margin-top:15px">
+
+        <h3 style="margin-bottom:20px">
+            System Settings
+        </h3>
+
+
+        <div style="display:grid;gap:15px">
+
+
+            <label>
+
+                Building Name
+
+                <input
+                    type="text"
+                    value="Green Valley Residency"
+                    style="
+                    width:100%;
+                    padding:12px;
+                    margin-top:7px;
+                    border:1px solid #e2e8f0;
+                    border-radius:8px;
+                    "
+                >
+
+            </label>
+
+
+            <label>
+
+                Location
+
+                <input
+                    type="text"
+                    value="Ahmedabad, Gujarat"
+                    style="
+                    width:100%;
+                    padding:12px;
+                    margin-top:7px;
+                    border:1px solid #e2e8f0;
+                    border-radius:8px;
+                    "
+                >
+
+            </label>
+
+
+            <button
+                style="
+                width:max-content;
+                padding:11px 20px;
+                border:none;
+                border-radius:8px;
+                color:white;
+                background:#087cf5;
+                "
+                onclick="alert('Settings saved successfully!')"
+            >
+
+                Save Settings
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    © 2026 SmartBuild.
+    Smart Building Management System.
+
+</footer>
+
+
+</main>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+const loginForm =
+document.getElementById("loginForm");
+
+const loginPage =
+document.getElementById("loginPage");
+
+const dashboardApp =
+document.getElementById("dashboardApp");
+
+const loginError =
+document.getElementById("loginError");
+
+
+loginForm.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    const password =
+    document.getElementById("password").value;
+
+
+    if(
+        email === "admin@smartbuild.com"
+        &&
+        password === "admin123"
+    ){
+
+        localStorage.setItem(
+            "smartBuildLoggedIn",
+            "true"
+        );
+
+        loginPage.style.display="none";
+
+        dashboardApp.style.display="block";
+
+        initializeCharts();
+
+    }
+
+    else{
+
+        loginError.style.display="block";
+
+    }
+
+});
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE
+========================================================= */
+
+document
+.getElementById("passwordEye")
+.addEventListener("click",function(){
+
+    const password =
+    document.getElementById("password");
+
+    if(password.type==="password"){
+
+        password.type="text";
+
+        this.classList.remove("fa-eye");
+
+        this.classList.add("fa-eye-slash");
+
+    }
+
+    else{
+
+        password.type="password";
+
+        this.classList.remove("fa-eye-slash");
+
+        this.classList.add("fa-eye");
+
+    }
+
+});
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document
+.getElementById("logout")
+.addEventListener("click",function(){
+
+    localStorage.removeItem(
+        "smartBuildLoggedIn"
+    );
+
+    dashboardApp.style.display="none";
+
+    loginPage.style.display="flex";
+
+});
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+document
+.getElementById("mobileMenu")
+.addEventListener("click",function(){
+
+    document
+    .getElementById("sidebar")
+    .classList.toggle("show");
+
+});
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+const navItems =
+document.querySelectorAll(".nav-item");
+
+
+navItems.forEach(item=>{
+
+    item.addEventListener("click",function(e){
+
+        e.preventDefault();
+
+        const page =
+        this.getAttribute("data-page");
+
+        showPage(page);
+
+    });
+
+});
+
+
+function showPage(page){
+
+    /* Hide dashboard */
+
+    document
+    .getElementById("dashboardPage")
+    .style.display="none";
+
+
+    /* Hide modules */
+
+    document
+    .querySelectorAll(".module")
+    .forEach(module=>{
+
+        module.classList.remove("active");
+
+    });
+
+
+    /* Show selected */
+
+    if(page==="dashboard"){
+
+        document
+        .getElementById("dashboardPage")
+        .style.display="block";
+
+    }
+
+    else{
+
+        const target =
+        document.getElementById(
+            page+"Page"
+        );
+
+        if(target){
+            target.classList.add("active");
+        }
+
+    }
+
+
+    /* Active navigation */
+
+    navItems.forEach(item=>{
+
+        item.classList.remove("active");
+
+        if(
+            item.getAttribute("data-page")
+            === page
+        ){
+
+            item.classList.add("active");
+
+        }
+
+    });
+
+
+    /* Close mobile sidebar */
+
+    document
+    .getElementById("sidebar")
+    .classList.remove("show");
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+    const now =
+    new Date();
+
+    let hours =
+    now.getHours();
+
+    const minutes =
+    String(
+        now.getMinutes()
+    ).padStart(2,"0");
+
+    const seconds =
+    String(
+        now.getSeconds()
+    ).padStart(2,"0");
+
+    const ampm =
+    hours >= 12
+    ? "PM"
+    : "AM";
+
+    hours =
+    hours % 12 || 12;
+
+
+    document
+    .getElementById("clock")
+    .textContent =
+    `${hours}:${minutes}:${seconds} ${ampm}`;
+
+}
+
+
+updateClock();
+
+setInterval(updateClock,1000);
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function updateDate(){
+
+    const now =
+    new Date();
+
+    const options={
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+    };
+
+    document
+    .getElementById("dateText")
+    .textContent =
+    now.toLocaleDateString(
+        "en-IN",
+        options
+    );
+
+}
+
+updateDate();
+
+
+/* =========================================================
+   CHARTS
+========================================================= */
+
+let chartsInitialized=false;
+
+
+function initializeCharts(){
+
+    if(chartsInitialized)
+        return;
+
+    chartsInitialized=true;
+
+
+    /* ================= ENERGY ================= */
+
+    const energy =
+    document.getElementById(
+        "energyChart"
+    );
+
+
+    new Chart(
+        energy,
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels:[
+                    "Morning",
+                    "Afternoon",
+                    "Evening",
+                    "Night"
+                ],
+
+                datasets:[{
+
+                    data:[
+                        35,
+                        52,
+                        70,
+                        42
+                    ],
+
+                    backgroundColor:[
+                        "#22c55e",
+                        "#3b82f6",
+                        "#f97316",
+                        "#8b5cf6"
+                    ],
+
+                    borderRadius:7
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                plugins:{
+                    legend:{
+                        display:false
+                    }
+                },
+
+                scales:{
+
+                    y:{
+                        beginAtZero:true,
+                        grid:{
+                            color:"#eef2f7"
+                        }
+                    },
+
+                    x:{
+                        grid:{
+                            display:false
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* ================= WATER ================= */
+
+    const water =
+    document.getElementById(
+        "waterChart"
+    );
+
+
+    new Chart(
+        water,
+        {
+
+            type:"doughnut",
+
+            data:{
+
+                datasets:[{
+
+                    data:[
+                        64,
+                        36
+                    ],
+
+                    backgroundColor:[
+                        "#2563eb",
+                        "#e2e8f0"
+                    ],
+
+                    borderWidth:0
+
+                }]
+
+            },
+
+            options:{
+
+                cutout:"78%",
+
+                plugins:{
+                    legend:{
+                        display:false
+                    }
+                }
+
+            }
+
+        }
+    );
+
+
+    /* ================= TEMPERATURE ================= */
+
+    const temperature =
+    document.getElementById(
+        "temperatureChart"
+    );
+
+
+    new Chart(
+        temperature,
+        {
+
+            type:"line",
+
+            data:{
+
+                labels:[
+                    "12 AM",
+                    "3 AM",
+                    "6 AM",
+                    "9 AM",
+                    "12 PM",
+                    "3 PM",
+                    "6 PM",
+                    "9 PM"
+                ],
+
+                datasets:[{
+
+                    data:[
+                        25,
+                        25,
+                        26,
+                        28,
+                        30,
+                        29,
+                        36,
+                        32
+                    ],
+
+                    borderColor:"#f97316",
+
+                    backgroundColor:
+                    "rgba(249,115,22,.12)",
+
+                    fill:true,
+
+                    tension:.4,
+
+                    pointRadius:2
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                plugins:{
+                    legend:{
+                        display:false
+                    }
+                },
+
+                scales:{
+
+                    y:{
+                        suggestedMin:20,
+                        suggestedMax:40
+                    },
+
+                    x:{
+                        grid:{
+                            display:false
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* ================= OCCUPANCY ================= */
+
+    const occupancy =
+    document.getElementById(
+        "occupancyChart"
+    );
+
+
+    new Chart(
+        occupancy,
+        {
+
+            type:"doughnut",
+
+            data:{
+
+                datasets:[{
+
+                    data:[
+                        101,
+                        19
+                    ],
+
+                    backgroundColor:[
+                        "#2563eb",
+                        "#cbd5e1"
+                    ],
+
+                    borderWidth:0
+
+                }]
+
+            },
+
+            options:{
+
+                cutout:"78%",
+
+                plugins:{
+                    legend:{
+                        display:false
+                    }
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AUTO LOGIN CHECK
+========================================================= */
+
+if(
+    localStorage.getItem(
+        "smartBuildLoggedIn"
+    ) === "true"
+){
+
+    loginPage.style.display="none";
+
+    dashboardApp.style.display="block";
+
+    initializeCharts();
+
+}
+
+</script>
+<script>
+const API_URL = "https://77h5mjj800.execute-api.us-east-2.amazonaws.com/api";
+
+async function testSmartBuildAPI() {
+    try {
+        const response = await fetch(`${API_URL}/health`);
+
+        if (!response.ok) {
+            throw new Error("Backend API not responding");
+        }
+
+        const data = await response.json();
+
+        console.log("✅ SmartBuild Backend Connected");
+        console.log(data);
+
+    } catch (error) {
+        console.error("❌ Backend Connection Failed");
+        console.error(error);
+    }
+}
+
+testSmartBuildAPI();
+
+async function loadDashboardData() {
+    try {
+        const response = await fetch(
+            "https://77h5mjj800.execute-api.us-east-2.amazonaws.com/api/dashboard"
+        );
+
+        const result = await response.json();
+
+        console.log("✅ Dashboard Data:", result);
+
+        if (result.success) {
+            console.log("Building:", result.building);
+            console.log("Monitoring:", result.monitoring);
+            console.log("Statistics:", result.statistics);
+        }
+
+    } catch (error) {
+        console.error("❌ Dashboard API Error:", error);
+    }
+}
+
+loadDashboardData();
+</script>
+
+<script>
+/* =========================================================
+   SMARTBUILD API DATA BINDING
+========================================================= */
+
+const SMARTBUILD_API = "https://77h5mjj800.execute-api.us-east-2.amazonaws.com/api";
+
+function safeText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+async function loadSmartBuildDashboard() {
+    try {
+        const response = await fetch(`${SMARTBUILD_API}/dashboard`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const result = await response.json();
+        if (!result.success) throw new Error("Dashboard API returned an error");
+
+        const building = result.building;
+        const monitoring = result.monitoring;
+        const stats = result.statistics;
+
+        safeText("buildingName", building.name);
+        safeText("buildingLocation", `${building.city}, ${building.state}`);
+
+        safeText("energyUsageValue",
+            `${monitoring.electricity.value} ${monitoring.electricity.unit}`);
+        safeText("waterLevelValue",
+            `${monitoring.water.level}${monitoring.water.unit}`);
+        safeText("temperatureValue",
+            `${monitoring.temperature.value}${monitoring.temperature.unit}`);
+        safeText("residentCountValue", building.total_residents);
+
+        safeText("totalFlatsValue", building.total_flats);
+        safeText("occupancyValue",
+            `${Math.round((building.occupied_flats / building.total_flats) * 100)}%`);
+
+        safeText("waterCenterValue",
+            `${monitoring.water.level}${monitoring.water.unit}`);
+        safeText("waterCapacityText",
+            `${Math.round(10000 * monitoring.water.level / 100).toLocaleString()} / 10,000 L`);
+
+        safeText("occupancyCenterValue",
+            `${monitoring.occupancy.value}${monitoring.occupancy.unit}`);
+        safeText("occupiedFlatsValue", building.occupied_flats);
+        safeText("vacantFlatsValue", building.total_flats - building.occupied_flats);
+
+        safeText("monitorTemperatureValue",
+            `${monitoring.temperature.value}${monitoring.temperature.unit}`);
+        safeText("monitorWaterValue",
+            `${monitoring.water.level}${monitoring.water.unit}`);
+        safeText("monitorEnergyValue",
+            `${monitoring.electricity.value} ${monitoring.electricity.unit}`);
+
+        const notificationBadge = document.querySelector(".notification span");
+        if (notificationBadge) notificationBadge.textContent = stats.alerts;
+
+        const complaintBadge = document.querySelector(
+            '.nav-item[data-page="complaints"] .nav-badge'
+        );
+        if (complaintBadge) complaintBadge.textContent = stats.complaints;
+
+        console.log("✅ SmartBuild dashboard updated from backend");
+
+    } catch (error) {
+        console.error("❌ Dashboard API Error:", error);
+    }
+}
+
+loadSmartBuildDashboard();
+</script>
+
+
+<script>
+/* =========================================================
+   SENSORS + ALERTS - DYNAMODB API BINDING
+========================================================= */
+
+async function loadSensorsAndAlertsFromDynamoDB() {
+    try {
+        // -----------------------------
+        // LOAD SENSORS
+        // -----------------------------
+        const sensorResponse = await fetch(`${SMARTBUILD_API}/sensors`);
+
+        if (!sensorResponse.ok) {
+            throw new Error(`Sensors API HTTP ${sensorResponse.status}`);
+        }
+
+        const sensorResult = await sensorResponse.json();
+
+        if (!sensorResult.success) {
+            throw new Error("Sensors API returned an error");
+        }
+
+        const sensors = Array.isArray(sensorResult.sensors)
+            ? sensorResult.sensors
+            : [];
+
+        sensors.forEach(sensor => {
+            const type = String(sensor.type || "").toLowerCase();
+            const value = sensor.value ?? "-";
+            const unit = sensor.unit || "";
+            const status = sensor.status || "Normal";
+
+            if (type.includes("temperature")) {
+                safeText("monitorTemperatureValue", `${value}${unit}`);
+                safeText("temperatureValue", `${value}${unit}`);
+            }
+
+            if (type.includes("water")) {
+                safeText("monitorWaterValue", `${value}${unit}`);
+                safeText("waterLevelValue", `${value}${unit}`);
+                safeText("waterCenterValue", `${value}${unit}`);
+
+                if (unit === "%") {
+                    safeText(
+                        "waterCapacityText",
+                        `${Math.round(10000 * Number(value) / 100).toLocaleString()} / 10,000 L`
+                    );
+                }
+            }
+
+            if (type.includes("electricity") || type.includes("energy")) {
+                safeText("monitorEnergyValue", `${value} ${unit}`);
+                safeText("energyUsageValue", `${value} ${unit}`);
+            }
+
+            if (type.includes("occupancy")) {
+                safeText("occupancyCenterValue", `${value}${unit}`);
+            }
+        });
+
+        // -----------------------------
+        // LOAD ALERTS
+        // -----------------------------
+        const alertResponse = await fetch(`${SMARTBUILD_API}/alerts`);
+
+        if (!alertResponse.ok) {
+            throw new Error(`Alerts API HTTP ${alertResponse.status}`);
+        }
+
+        const alertResult = await alertResponse.json();
+
+        if (!alertResult.success) {
+            throw new Error("Alerts API returned an error");
+        }
+
+        const alerts = Array.isArray(alertResult.alerts)
+            ? alertResult.alerts
+            : [];
+
+        const activeAlerts = alerts.filter(alert =>
+            String(alert.status || "Active").toLowerCase() === "active"
+        );
+
+        safeText("securityAlertCount", activeAlerts.length);
+        safeText(
+            "securityAlertStatus",
+            activeAlerts.length > 0 ? "Review Required" : "All Clear"
+        );
+
+        const container = document.getElementById("activeAlertsContainer");
+
+        if (container) {
+            if (activeAlerts.length === 0) {
+                container.innerHTML = `
+                    <div class="alert">
+                        <div class="alert-icon alert-info">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <strong>No Active Alerts</strong>
+                            <small>All monitored systems are normal.</small>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = activeAlerts.map(alert => {
+                    const severity = String(alert.severity || "Medium").toLowerCase();
+                    const type = String(alert.type || "Alert");
+                    const message = alert.message || "System alert";
+                    const location = alert.location || "Building";
+
+                    let icon = "fa-triangle-exclamation";
+                    let iconClass = "alert-warning";
+
+                    if (type.toLowerCase().includes("water")) {
+                        icon = "fa-droplet";
+                    } else if (type.toLowerCase().includes("lift")) {
+                        icon = "fa-elevator";
+                    } else if (type.toLowerCase().includes("security")) {
+                        icon = "fa-shield-halved";
+                    } else if (type.toLowerCase().includes("electric")) {
+                        icon = "fa-bolt";
+                    } else if (type.toLowerCase().includes("temperature")) {
+                        icon = "fa-temperature-high";
+                    }
+
+                    if (severity === "high" || severity === "critical") {
+                        iconClass = "alert-danger";
+                    } else if (severity === "low") {
+                        iconClass = "alert-info";
+                    }
+
+                    return `
+                        <div class="alert">
+                            <div class="alert-icon ${iconClass}">
+                                <i class="fa-solid ${icon}"></i>
+                            </div>
+                            <div>
+                                <strong>${escapeHtml(message)}</strong>
+                                <small>${escapeHtml(location)} • ${escapeHtml(type)}</small>
+                            </div>
+                            <time>${escapeHtml(severity)}</time>
+                        </div>
+                    `;
+                }).join("");
+            }
+        }
+
+        console.log("✅ Sensors loaded from DynamoDB:", sensors);
+        console.log("✅ Alerts loaded from DynamoDB:", alerts);
+
+    } catch (error) {
+        console.error("❌ Sensors/Alerts API Error:", error);
+
+        const container = document.getElementById("activeAlertsContainer");
+        if (container) {
+            container.innerHTML = `
+                <div class="alert">
+                    <div style="text-align:center;width:100%;">
+                        Unable to load alerts.
+                    </div>
+                </div>
+            `;
+        }
+    }
+}
+
+loadSensorsAndAlertsFromDynamoDB();
+</script>
+
+
+<script>
+/* =========================================================
+   RESIDENTS - DYNAMODB API BINDING
+========================================================= */
+
+async function loadResidentsFromDynamoDB() {
+    const tableBody = document.getElementById("residentsTableBody");
+    if (!tableBody) return;
+
+    try {
+        const response = await fetch(`${SMARTBUILD_API}/residents`);
+
+        if (!response.ok) {
+            throw new Error(`Residents API HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error("Residents API returned an error");
+        }
+
+        const residents = Array.isArray(result.residents)
+            ? result.residents
+            : [];
+
+        if (residents.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        No residents found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = residents.map(resident => {
+            const flat = resident.flat || "-";
+            const apartment = flat;
+            const block = flat.includes("-")
+                ? flat.split("-")[0]
+                : "-";
+
+            const phone = resident.phone
+                ? `+91 ${resident.phone}`
+                : "-";
+
+            const status = resident.status || "Unknown";
+
+            return `
+                <tr>
+                    <td>${escapeHtml(resident.name || "-")}</td>
+                    <td>${escapeHtml(apartment)}</td>
+                    <td>${escapeHtml(block)}</td>
+                    <td>${escapeHtml(phone)}</td>
+                    <td>
+                        <span class="tag tag-green">
+                            ${escapeHtml(status)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        console.log("✅ Residents loaded from DynamoDB:", residents);
+
+    } catch (error) {
+        console.error("❌ Residents API Error:", error);
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Unable to load residents.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+loadResidentsFromDynamoDB();
+</script>
+
+</body>
+</html>
+
